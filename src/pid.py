@@ -97,11 +97,14 @@ if __name__ == "__main__":
 	t = sample_count
 
 	sbp.clear()
-	sbp.plot(xs[:t], pidm.SP[:t], 'b', ls='--')
-	sbp.plot(xs[:t], pidm.PV[:t], 'b')
-	sbp.plot(xs[:t], pidm.Err[:t], 'r')
-	sbp.plot(xs[:t], pidm.Output[:t], 'g')
-	sbp.legend(['SP', 'PV', 'Err', 'Output'])
+
+	for t in range(sample_count):
+		sbp.plot(xs[:t], pidm.SP[:t], 'b', ls='--')
+		sbp.plot(xs[:t], pidm.PV[:t], 'b')
+		sbp.plot(xs[:t], pidm.Err[:t], 'r')
+		sbp.plot(xs[:t], pidm.Output[:t], 'g')
+		sbp.legend(['SP', 'PV', 'Err', 'Output'])
+		plt.pause(0.05)
 
 	# anim = animation.FuncAnimation(fig=fig, func=animate, frames=math.floor(sample_count / 10), interval=ts * 1000)
 	# anim.save('pid.gif', writer="imagemagick", fps=5)
