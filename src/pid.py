@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 import math
 
@@ -79,7 +80,7 @@ if __name__ == "__main__":
 	PV = 0
 
 	for i in range(sample_count):
-		pid.set_SP(abs(math.sin(i / 100)) * 20)
+		pid.set_SP(math.cos(i / 100) * math.pi / 5 + math.cos(i / 50) * math.pi / 7 + (abs(math.sin(i / 40)) * math.pi / 10))
 		pid.set_PV(PV)
 
 		pid.update(ts)
@@ -88,9 +89,21 @@ if __name__ == "__main__":
 		PV += pid.Output * 0.03
 
 	xs = np.linspace(0, sample_count * ts, sample_count)
-	plt.plot(xs, pidm.SP)
-	plt.plot(xs, pidm.PV)
-	plt.plot(xs, pidm.Err)
-	plt.plot(xs, pidm.Output)
-	plt.legend(['SP', 'PV', 'Err', 'Output'])
+	fig = plt.figure()
+	sbp = fig.add_subplot(1, 1, 1)
+
+	# def animate(t):
+	# 	t = math.floor(t * 10)
+	t = sample_count
+
+	sbp.clear()
+	sbp.plot(xs[:t], pidm.SP[:t], 'b', ls='--')
+	sbp.plot(xs[:t], pidm.PV[:t], 'b')
+	sbp.plot(xs[:t], pidm.Err[:t], 'r')
+	sbp.plot(xs[:t], pidm.Output[:t], 'g')
+	sbp.legend(['SP', 'PV', 'Err', 'Output'])
+
+	# anim = animation.FuncAnimation(fig=fig, func=animate, frames=math.floor(sample_count / 10), interval=ts * 1000)
+	# anim.save('pid.gif', writer="imagemagick", fps=5)
+
 	plt.show()
