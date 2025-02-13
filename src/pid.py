@@ -39,7 +39,7 @@ class PID():
 
 		P = self.Err * self.Kp
 		I = self.sum_Err * self.Ki
-		D = (self.last_Err - self.Err) * self.Kd / ts
+		D = (self.Err - self.last_Err) * self.Kd / ts
 
 		self.Output = P + I + D
 
