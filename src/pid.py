@@ -39,7 +39,7 @@ class PID():
 
 		P = self.Err * self.Kp
 		I = self.sum_Err * self.Ki
-		D = (self.last_Err - self.Err) * self.Kd / ts
+		D = (self.Err - self.last_Err) * self.Kd / ts
 
 		self.Output = P + I + D
 
@@ -70,6 +70,20 @@ class PIDMonitor():
 
 		self.index += 1
 
+	def graph_data(self, ts):
+		xs = np.linspace(0, self.sample_count * ts, self.sample_count)
+
+		fig = plt.figure()
+		sbp = fig.add_subplot(1, 1, 1)
+
+		sbp.plot(xs, self.SP, 'b', ls='--')
+		sbp.plot(xs, self.PV, 'b')
+		sbp.plot(xs, self.Err, 'r')
+		sbp.plot(xs, self.Output, 'g')
+		sbp.legend(['SP', 'PV', 'Err', 'Output'])
+
+		plt.show()
+
 if __name__ == "__main__":
 	ts = 0.005
 	sample_count = 1000
@@ -88,9 +102,8 @@ if __name__ == "__main__":
 
 		PV += pid.Output * 0.03
 
-	xs = np.linspace(0, sample_count * ts, sample_count)
-	fig = plt.figure()
-	sbp = fig.add_subplot(1, 1, 1)
+	
+	
 
 	# def animate(t):
 	# 	t = math.floor(t * 10)
@@ -99,14 +112,10 @@ if __name__ == "__main__":
 	sbp.clear()
 
 	for t in range(sample_count):
-		sbp.plot(xs[:t], pidm.SP[:t], 'b', ls='--')
-		sbp.plot(xs[:t], pidm.PV[:t], 'b')
-		sbp.plot(xs[:t], pidm.Err[:t], 'r')
-		sbp.plot(xs[:t], pidm.Output[:t], 'g')
-		sbp.legend(['SP', 'PV', 'Err', 'Output'])
+		
 		plt.pause(0.05)
 
 	# anim = animation.FuncAnimation(fig=fig, func=animate, frames=math.floor(sample_count / 10), interval=ts * 1000)
 	# anim.save('pid.gif', writer="imagemagick", fps=5)
 
-	plt.show()
+	
