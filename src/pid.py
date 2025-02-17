@@ -19,6 +19,7 @@ class PID():
 
 		self.SP, self.PV = 0, 0
 		self.Err, self.last_Err, self.sum_Err = 0, 0, 0
+		self.P, self.I, self.D = 0, 0, 0
 		self.Output = 0
 	
 	def get_SP(self):
@@ -37,11 +38,11 @@ class PID():
 		self.Err = self.SP - self.PV
 		self.sum_Err += self.Err
 
-		P = self.Err * self.Kp
-		I = self.sum_Err * self.Ki
-		D = (self.Err - self.last_Err) * self.Kd / ts
+		self.P = self.Err * self.Kp
+		self.I = self.sum_Err * self.Ki
+		self.D = (self.Err - self.last_Err) * self.Kd / ts
 
-		self.Output = P + I + D
+		self.Output = self.P + self.I + self.D
 
 		self.last_Err = self.Err
 
@@ -56,6 +57,9 @@ class PIDMonitor():
 		self.PV = np.zeros((sample_count))
 		self.Err = np.zeros((sample_count))
 		self.Output = np.zeros((sample_count))
+		self.P = np.zeros(shape=sample_count)
+		self.I = np.zeros(shape=sample_count)
+		self.D = np.zeros(shape=sample_count)
 
 		self.index = 0
 	
@@ -68,13 +72,16 @@ class PIDMonitor():
 		self.Err[self.index] = self.pid.Err
 		self.Output[self.index] = self.pid.Output
 
+		self.P[self.index] = self.pid.P
+		self.I[self.index] = self.pid.I
+		self.D[self.index] = self.pid.D
 		self.index += 1
 
 	def graph_data(self, ts):
 		xs = np.linspace(0, self.sample_count * ts, self.sample_count)
 
 		fig = plt.figure()
-		sbp = fig.add_subplot(1, 1, 1)
+		sbp = fig.add_subplot(2, 1, 1)
 
 		sbp.plot(xs, self.SP, 'b', ls='--')
 		sbp.plot(xs, self.PV, 'b')
@@ -82,7 +89,16 @@ class PIDMonitor():
 		sbp.plot(xs, self.Output, 'g')
 		sbp.legend(['SP', 'PV', 'Err', 'Output'])
 
+		sbp = fig.add_subplot(2, 1, 2)
+
+		sbp.plot(xs, self.P, 'r')
+		sbp.plot(xs, self.I, 'g')
+		sbp.plot(xs, self.D, 'b')
+		sbp.legend(['P', 'I', 'D'])
+
 		plt.show()
+
+
 
 if __name__ == "__main__":
 	ts = 0.005

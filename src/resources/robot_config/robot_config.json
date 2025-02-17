@@ -45,6 +45,14 @@
         "param": [
             {"channel": "can0", "bus_index": 0, "motor_id": 11, "Km": 2.3345794868713563, "reduction": 1, "speed": 20}
         ],
+        "q_u_limit": [360],
+        "q_l_limit": [-360]
+    },
+
+    "PENDULUM_MASTER" : {
+        "param" : [
+            {"channel": "can1", "bus_index": 0, "motor_id": 12, "Km": 2.3345794868713563, "reduction": 1, "speed": 20}
+        ], 
         "q_u_limit": [180],
         "q_l_limit": [-180]
     }
