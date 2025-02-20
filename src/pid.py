@@ -77,7 +77,7 @@ class PIDMonitor():
 		self.D[self.index] = self.pid.D
 		self.index += 1
 
-	def graph_data(self, ts):
+	def graph_data(self, ts, title):
 		xs = np.linspace(0, self.sample_count * ts, self.sample_count)
 
 		fig = plt.figure()
@@ -88,6 +88,7 @@ class PIDMonitor():
 		sbp.plot(xs, self.Err, 'r')
 		sbp.plot(xs, self.Output, 'g')
 		sbp.legend(['SP', 'PV', 'Err', 'Output'])
+		sbp.set_title(title)
 
 		sbp = fig.add_subplot(2, 1, 2)
 
@@ -97,8 +98,6 @@ class PIDMonitor():
 		sbp.legend(['P', 'I', 'D'])
 
 		plt.show()
-
-
 
 if __name__ == "__main__":
 	ts = 0.005
