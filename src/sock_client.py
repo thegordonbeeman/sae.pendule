@@ -13,14 +13,11 @@ sockets = [s1, s2, s3, s4, s5]
 values = [s1_values, s2_values, s3_values, s4_values, s5_values]
 prefixes = [s1_prefix, s2_prefix, s3_prefix, s4_prefix, s5_prefix]
 
-print(sockets)
-
 for s in sockets:
     s.connect(('127.0.0.1', 12345))
 
 while True:
     for sock, prefix, value in zip(sockets, prefixes, values):
         payload = prefix +':'+ str(value)
-        print(payload)
         sock.send(payload.encode())
     time.sleep(2)
