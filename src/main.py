@@ -5,6 +5,10 @@ import numpy as np
 from coppeliasim_zmqremoteapi_client import RemoteAPIClient
 from pid import PID, PIDMonitor
 
+from ServerSocket import ServerSocket
+from SlaveSocket import SlaveSocket
+from MasterSocket import MasterSocket
+
 np.set_printoptions(suppress=True)
 
 USE_TOOL = False
@@ -83,7 +87,7 @@ def main():
     pendule_master.init_offset()
 
     pendule_slave.set_joint_position(0)
-    #pendule_master.set_joint_position(0)
+    pendule_master.set_joint_position(0)
 
     i = 0
     while i < nb_samples:
@@ -117,6 +121,8 @@ def main():
         pendule_master.set_joint_torque(tau_master)
         i+=1
         pid_slave_mon.update()
+        pid_master_mon.update()
+
         elapsed_time = time.time()-time_prev
         if (elapsed_time < param_p1['ts']):
             time.sleep(param_p1['ts']-elapsed_time)

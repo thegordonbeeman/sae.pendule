@@ -3,32 +3,34 @@ from ServerSocket import ServerSocket
 from SlaveSocket import SlaveSocket
 import time, random
 
-s1 = SlaveSocket()
-s2 = SlaveSocket()
-s3 = SlaveSocket()
-s4 = MasterSocket()
-s5 = MasterSocket()
+slave = SlaveSocket()
 
-sockets = [s1, s2, s3, s4, s5]
-masters = [s4, s5]
-slaves = [s1, s2, s3]
+master = MasterSocket()
+
+sockets = [slave, master]
+
 
 for s in sockets:
-    s.connect('127.0.0.1', 12346)
+    s.connect('127.0.0.1', 12345)
 
-for s in masters:
-    s.registerAsMaster()
+slave.registerAsSlave()
+master.registerAsMaster()
 
-for s in slaves:
-    s.registerAsSlave()
+try:
+    while 1:
+        '''    for m in masters:
+            time.sleep(1*random.uniform(0,1))
+            m.sendPosition(0.2)
 
-while 1:
-    '''    for m in masters:
-        time.sleep(1*random.uniform(0,1))
-        m.sendPosition(0.2)
+        for s in slaves:
+            time.sleep(1*random.uniform(0,1))
+            s.requestPosition()'''
+        slave._socket.send(b"SLAVE")
+        time.sleep(2)
+        master._socket.send(b"MASTER")
+        time.sleep(2)
 
-    for s in slaves:
-        time.sleep(1*random.uniform(0,1))
-        s.requestPosition()'''
-
-    masters[0]._socket.send(b"FOOBAR")
+except BrokenPipeError:
+    for s in sockets:
+        s.close()
+        exit()
